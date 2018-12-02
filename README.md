@@ -4,6 +4,7 @@ Construction of functional network from fMRI tasked-based data
 You must have AFNI installed on your local machine.
 
 From terminal:
+
 extract the voxel coordinates from the activation map
 1.$ 3dmaskdump activation_map_file[2] > voxel_coord.txt
 Get rid of all the voxels below the correlation value used to generate the activatio map
