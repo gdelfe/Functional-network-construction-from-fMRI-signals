@@ -51,7 +51,7 @@ Input files: NoN_nodes_mod.txt and time_series.txt
 Check that the $PATH for your input files is correct, if not, updated it. This code will create a series of correlation matrices thresholded at value lambda and save their plots.
 
 ## Generate Functional Network
-Run file NoN_construction_GC_two_lambdas
+Run file NoN_construction_GC_two_lambdas.m
 
 Input file: NoN_nodes_mod.txt
 
@@ -64,6 +64,7 @@ It will output a series of files:
 
 ## Plot the functional network at the module level
 
+Run file circular_single_subj.m
 Input file: NoN_nodes_mod.txt and matrix_outlinks.txt
 
 This code will output a simple visualization of the network at the level of connections among modules. Each node is a module and a link between two nodes represents a weighted connection between two modules. 
