@@ -3,7 +3,7 @@ Construction of functional network from fMRI tasked-based data
 
 You must have AFNI installed on your local machine.
 
-From terminal:
+## From terminal:
 
 extract the voxel coordinates from the activation map
 
