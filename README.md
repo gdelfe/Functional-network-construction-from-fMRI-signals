@@ -65,6 +65,7 @@ It will output a series of files:
 ## Plot the functional network at the module level
 
 Run file circular_single_subj.m
+
 Input file: NoN_nodes_mod.txt and matrix_outlinks.txt
 
 This code will output a simple visualization of the network at the level of connections among modules. Each node is a module and a link between two nodes represents a weighted connection between two modules. 
