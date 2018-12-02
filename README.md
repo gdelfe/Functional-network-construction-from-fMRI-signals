@@ -30,10 +30,16 @@ Get time series of the active voxels
 6.$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt
 
 Output files further used to construct the functional network at the end of these above commands are:
+
 1. NoN_nodes_mod.txt : 
+
 6 columns file with NR / x / y / z / correlation value / module value
+
 where NR - Number row
+
 x, y, z - voxel coordinate
+
 module value - value of the brain module for that voxel
 
-2. times_series.txt: each row of this file contains the time series of one voxel. The ordering of the voxels follows the same ordering of the file NoN_nodes_mod.txt. 
+2. times_series.txt: 
+each row of this file contains the time series of one voxel. The ordering of the voxels follows the same ordering of the file NoN_nodes_mod.txt. 
