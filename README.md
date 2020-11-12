@@ -1,4 +1,4 @@
-# Network of Network construction from functional MRI signal
+# Functional brain network construction from functional MRI signal
 Construction of functional network from fMRI tasked-based data
 
 You must have AFNI installed on your local machine.
@@ -25,7 +25,7 @@ where 0001 indicates cluster 1.<br/>
 
 From terminal (awk): tranform the .BRIK/.HEAD file into a .txt file
 ```
-$ 3dmaskdump Clust_mask_0001+orig. | awk '($4 !=0){print $0}' > cluster_1.txt
+1. $ 3dmaskdump Clust_mask_0001+orig. | awk '($4 !=0){print $0}' > cluster_1.txt
 ```
 Output is in the format: x / y / z / module_label
 
@@ -44,14 +44,14 @@ clust_n.txt
 ```
 Merge together all the clusters with 
 ```
-$ cat clust_1.txt clust_2.txt ... clust_n.txt > NoN_temp.txt
+2. $ cat clust_1.txt clust_2.txt ... clust_n.txt > NoN_temp.txt
 ```
 The NoN_temp.txt file contains the list of all the voxel coordinates and the corresponding module label, i.e x / y / z / module_label
 
 Extract the value of each voxel's correlation value with the model used in the task.
 
 ```
-$ 3dmaskdump functional.nii@2+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt
+3. $ 3dmaskdump functional.nii@2+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt
 ```
 
 where VALUE is the value of the correlation threshold used in AFNI when generating the activation map
@@ -59,7 +59,7 @@ where VALUE is the value of the correlation threshold used in AFNI when generati
 Join the voxel coordinates, with their correlation value and their module by using the bash script
 
 ```
-$ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt
+4. $ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt
 ```
 
 The output of the above command is NoN_nodes_temp.txt, structured as follows: x / y / z / correlation_val / module_label
@@ -67,7 +67,7 @@ The output of the above command is NoN_nodes_temp.txt, structured as follows: x 
 Add the number of the line on the previous output, as first column:
 
 ```
-$ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt
+5. $ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt
 ```
 
 NoN_nodes_mod.txt is a 6 columns file: NR / x / y / z / correlation value / module value, where NR = number of row. 
@@ -77,7 +77,7 @@ Use the 4D file `functional.nii` and the bash script together with NoN_nodes_mod
 Get time series of the active voxels:
 
 ```
-$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt
+6. $ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt
 ```
 
 The time_series.txt file contains the time series for each voxel in NoN_nodes_mod.txt
