@@ -1,58 +1,85 @@
-# NoN
+# Network of Network construction from functional MRI signal
 Construction of functional network from fMRI tasked-based data
 
 You must have AFNI installed on your local machine.
 
 ## In AFNI:
 
-Generate activation map by using 'correlation' as a way of thresholding.
+Generate activation map by using 'correlation' as a way of thresholding:
+If the name of the functional file was `functional.nii` (4D file, 3D coordinates 
++ 1D BOLD signal) this will generate a file  `functional.nii@2+orig.BRIK` and 
+`functional.nii@2+orig.HEAD`. These files
+will be used in the following.
 
-## From terminal:
-
-extract the voxel coordinates from the activation map. 
-Clusterize --> NN level = 2; Voxels = 30/40
--> Rpt -> Save the single modules one by one
+Extract the voxel coordinates from the activation map <br/>
+Clusterize --> NN level = 2; Voxels = 30/40<br/>
+-> Rpt -> Save the single modules one by one<br/>
 Each module is save in a format 
 ```
 Clust_mask_0001+orig.BRIK
 Clust_mask_0001+orig.HEAD
 ```
-where 0001 indicates cluster 1
+where 0001 indicates cluster 1.<br/>
 
+### From terminal:
 
-1.$ 3dmaskdump activation_map_file[2] > voxel_coord.txt
+From terminal (awk): tranform the .BRIK/.HEAD file into a .txt file
+```
+$ 3dmaskdump Clust_mask_0001+orig. | awk '($4 !=0){print $0}' > cluster_1.txt
+```
+Output is in the format: x / y / z / module_label
 
-Get rid of all the voxels below the correlation value used to generate the activatio map
+Where module x,y,z are spacial coordinates of the voxel and module label is 1 for cluster 0001. This must be changed as needed, since the user might want to order the cluster at their convenience.
 
-2.$ awk -v th=VALUE '($4 > th || $4<-th){print $0}' voxel_coord.txt > voxel_coord_th.txt
+After saving all the clusters and converting them into .txt files, the user can proceed with cluster segmentation (if needed, not explained here).
 
-Join the voxel coordinates, with their correlation value and their module
+All the segmented clusters are saved in a form:
+```
+clust_1.txt
+clust_2.txt
+.
+.
+.
+cluster_n_segmented.txt
+```
+Merge together all the cluster with 
+```
+$ cat clust_1.txt clust_2.txt ... clust_n.txt > NoN_temp.txt
+```
+The NoN_temp.txt file contains the list of all the voxel coordinates and the corresponding module label.
 
-3.$ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt
+Extract the value of the correlations for the voxels
 
-Add number of line on the previous output
+`$ 3dmaskdump functional.nii@2+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt`
 
-4.$ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt
+where VALUE is the value of the correlation threshold used in AFNI when generating the activation map
 
-Convert BRICK and HEAD file to NIFTI
+Join the voxel coordinates, with their correlation value and their module by using the bash script
 
-5.$ 3dAFNItoNIFTI -prefix letter_preprocessed.nii name_file_with_time_series_preprocessed
+`$ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt`
+
+The output of the above command is NoN_nodes_temp.txt, structured as follows: x / y / z / correlation_val / module_label
+
+Add the number of the line on the previous output, as first column:
+
+`$ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt`
+
+The file NoN_nodes_mod.txt contains info about voxel coordinates, correlation and module label.
+
+Use the 4D file `functional.nii` and the bash script together with NoN_nodes_mod.txt to obtain the time series.
 
 Get time series of the active voxels
 
-6.$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt
+`$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt`
 
-Output files further used to construct the functional network at the end of these above commands are:
+The time_series.txt file contains the time series for each voxel in NoN_nodes_mod.txt
+
+The files further used to construct the functional network at the end of the above procedure:
 
 1. NoN_nodes_mod.txt : 
 
 6 columns file with NR / x / y / z / correlation value / module value
 
-where NR - Number row
-
-x, y, z - voxel coordinate
-
-module value - value of the brain module for that voxel
 
 2. times_series.txt: 
 each row of this file contains the time series of one voxel. The ordering of the voxels follows the same ordering of the file NoN_nodes_mod.txt. 
