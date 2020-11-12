@@ -7,7 +7,7 @@ You must have AFNI installed on your local machine.
 
 Generate activation map by using 'correlation' as a way of thresholding:
 If the name of the functional file was `functional.nii` (4D file, 3D coordinates 
-+ 1D BOLD signal) this will generate a file  `functional.nii@2+orig.BRIK` and 
+and 1D BOLD signal) this will generate a file  `functional.nii@2+orig.BRIK` and 
 `functional.nii@2+orig.HEAD`. These files
 will be used in the following.
 
