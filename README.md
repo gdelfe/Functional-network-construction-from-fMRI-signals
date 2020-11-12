@@ -50,19 +50,25 @@ The NoN_temp.txt file contains the list of all the voxel coordinates and the cor
 
 Extract the value of each voxel's correlation value with the model used in the task.
 
-```$ 3dmaskdump functional.nii@2+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt```
+```
+$ 3dmaskdump functional.nii@2+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt
+```
 
 where VALUE is the value of the correlation threshold used in AFNI when generating the activation map
 
 Join the voxel coordinates, with their correlation value and their module by using the bash script
 
-```$ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt```
+```
+$ ./nodes_coord_modules_and_corr.sh NoN_temp.txt voxel_coord_th.txt NoN_nodes_temp.txt
+```
 
 The output of the above command is NoN_nodes_temp.txt, structured as follows: x / y / z / correlation_val / module_label
 
 Add the number of the line on the previous output, as first column:
 
-```$ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt```
+```
+$ awk '{print NR,$0}' NoN_nodes_temp.txt > NoN_nodes_mod.txt
+```
 
 NoN_nodes_mod.txt is a 6 columns file: NR / x / y / z / correlation value / module value, where NR = number of row. 
 
@@ -70,7 +76,9 @@ Use the 4D file `functional.nii` and the bash script together with NoN_nodes_mod
 
 Get time series of the active voxels:
 
-```$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt```
+```
+$ ./get_act_time_series.sh NoN_nodes_mod.txt letter_preprocessed.nii time_series.txt
+```
 
 The time_series.txt file contains the time series for each voxel in NoN_nodes_mod.txt
 
