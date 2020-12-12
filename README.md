@@ -51,7 +51,7 @@ The NoN_temp.txt file contains the list of all the voxel coordinates and the cor
 Extract the value of each voxel's correlation value with the model used in the task.
 
 ```
-3. $ 3dmaskdump functional.nii@+orig.[2] > voxel_coord.txt | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt
+3. $ 3dmaskdump functional.nii@+orig.[2] | awk -v th=VALUE '($4 > th || $4<-th){print $0}' > voxel_coord_th.txt
 ```
 
 where VALUE is the value of the correlation threshold used in AFNI when generating the activation map
