@@ -1,5 +1,5 @@
 # Functional brain network construction from functional MRI signal
-Construction of functional network from fMRI tasked-based data
+These series of codes and scripts performs a functional network inference construction from fMRI tasked-based data. The procedure starts from a fMRI map generated with the software AFNI. It extracts the time series (BOLD signal) of the active voxels and, from these, it generates a pair-wise correlation matrix of the active voxels, organized in Region Of Interests (ROIs). Further, the code performs inference of a connectivity matrix from the correlation matrix using a LASSO method with a variable threshold which is fixed based on network integration.
 
 You must have AFNI installed on your local machine.
 
